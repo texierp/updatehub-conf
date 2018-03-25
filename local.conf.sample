@@ -1,0 +1,46 @@
+EXTRA_IMAGE_FEATURES ?= 'debug-tweaks'
+USER_CLASSES ?= 'buildstats image-mklibs image-prelink'
+PATCHRESOLVE = 'noop'
+BB_DISKMON_DIRS ??= '\
+     \
+    STOPTASKS,${TMPDIR},1G,100K \
+    STOPTASKS,${DL_DIR},1G,100K \
+    STOPTASKS,${SSTATE_DIR},1G,100K \
+    STOPTASKS,/tmp,100M,100K \
+    ABORT,${TMPDIR},100M,1K \
+    ABORT,${DL_DIR},100M,1K \
+    ABORT,${SSTATE_DIR},100M,1K \
+    ABORT,/tmp,10M,1K \
+'
+PACKAGECONFIG_append_pn-qemu-native = ' sdl'
+PACKAGECONFIG_append_pn-nativesdk-qemu = ' sdl'
+CONF_VERSION = '1'
+MACHINE ?= 'imx7s-warp'
+DISTRO ?= 'fslc-framebuffer'
+PACKAGE_CLASSES ?= 'package_rpm'
+ACCEPT_FSL_EULA = "1"
+
+# Use systemd as init system
+VIRTUAL-RUNTIME_init_manager = "systemd"
+DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
+VIRTUAL-RUNTIME_initscripts = ""
+DISTRO_FEATURES_append = " systemd"
+
+# UpdateHub
+UPDATEHUB_ACCESS_ID = "Your access ID"
+UPDATEHUB_ACCESS_SECRET = "Your Access Secret"
+UPDATEHUB_PRODUCT_UID = "Your Product UID"
+UPDATEHUB_UHUPKG_PUBLIC_KEY = "<path to public key>"
+UPDATEHUB_UHUPKG_PRIVATE_KEY = "<path to private key>"
+
+# Misc
+KERNEL_MODULE_AUTOLOAD += "bcmdhd"
+
+# SSH
+EXTRA_IMAGE_FEATURES += "ssh-server-dropbear"
+
+# Packages
+CORE_IMAGE_EXTRA_INSTALL += "packagegroup-base updatehub-local-update updatehub-ctl"
+
+# Release Number
+BUILD_NUMBER = "-b1"
